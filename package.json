@@ -8,7 +8,7 @@
     "start": "nodemon index"
   },
   "engines": {
-    "node": "your-version"
+    "node": "v18.12.1"
   },
   "repository": {
     "type": "git",
