@@ -8,9 +8,7 @@ require('dotenv').config()
 
 mongoose.set("strictQuery", false);
 
-const url = `mongodb+srv://vadychka:${process.env.MONGODB_PAS}@cluster0.l3cg56q.mongodb.net/?retryWrites=true&w=majority`
-
-mongoose.connect(url)
+mongoose.connect(process.env.MONGODB_URL)
 
 const bot = new TelegramApi(process.env.TOKEN, {polling:true})
 
