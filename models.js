@@ -1,0 +1,22 @@
+const mongoose = require("mongoose");
+
+const UserSchema = new mongoose.Schema({
+  chatId: {
+    type: String,
+    required: false,
+  },
+  time: {
+    type: String,
+    required: false,
+  },
+  lat:{
+    type: Number
+  },
+  lon:{
+    type: Number
+  }
+});
+
+const User = mongoose.model("User", UserSchema);
+
+module.exports = User;
