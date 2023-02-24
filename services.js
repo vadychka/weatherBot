@@ -1,5 +1,12 @@
 const axios = require('axios');
 const userModel = require("./models");
+const TelegramApi = require('node-telegram-bot-api')
+const CronJob = require('cron').CronJob;
+const mongoose = require('mongoose')
+const validator = require('validator');
+const { sentWeather, addNewSubscribe } = require('./services');
+require('dotenv').config()
+
 
 module.exports.addNewSubscribe = (chatId, time)=> {
     mongoose.connect(process.env.MONGODB_URL)
