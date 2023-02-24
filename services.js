@@ -2,6 +2,8 @@ const axios = require('axios');
 const userModel = require("./models");
 
 module.exports.addNewSubscribe = (chatId, time)=> {
+    mongoose.connect(process.env.MONGODB_URL)
+    
     const newUser = new userModel({
       chatId,
       time
@@ -10,6 +12,7 @@ module.exports.addNewSubscribe = (chatId, time)=> {
   }
 
   module.exports.sentWeather = async(user, bot)=> {
+      mongoose.connect(process.env.MONGODB_URL)
     const getWeather = await axios(`https://api.openweathermap.org/data/2.5/weather?lat=${user.lat}&lon=${user.lon}&appid=${process.env.WEATHER_KEY}&units=metric`)
   
     const temp = getWeather.data.main.temp.toFixed(1)
