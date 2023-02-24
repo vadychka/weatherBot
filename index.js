@@ -7,9 +7,8 @@ const { sentWeather, addNewSubscribe } = require('./services');
 require('dotenv').config()
 
 mongoose.set("strictQuery", false);
-
-mongoose.connect(process.env.MONGODB_URL, retryWrites=true, {useNewUrlParser: true})
-console.log(111)
+mongoose.connect(process.env.MONGODB_URL)
+console.log(222)
 
 const bot = new TelegramApi(process.env.TOKEN, {polling:true})
 
