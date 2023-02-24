@@ -9,11 +9,7 @@ require('dotenv').config()
 mongoose.set("strictQuery", false);
 
 mongoose.connect(process.env.MONGODB_URL, retryWrites=true, {useNewUrlParser: true})
-mongoose.connection.once('open', function(){
-  console.log('Conection has been made!');
-      }).on('error', function(error){
-   console.log('Error is: ', error);
-    });
+console.log(111)
 
 const bot = new TelegramApi(process.env.TOKEN, {polling:true})
 
