@@ -46,6 +46,7 @@ bot.on('message', async(msg)=>{
 })
 
 bot.on('location', async(msg)=>{
+	mongoose.connect(process.env.MONGODB_URL)
   const chatId = msg.chat.id
   const userLat = msg.location.latitude
   const userLon = msg.location.longitude
@@ -56,6 +57,7 @@ bot.on('location', async(msg)=>{
 const job = new CronJob(
 	'0 */1 * * * *',
 	async function () {
+		mongoose.connect(process.env.MONGODB_URL)
     const moment = require('moment')
     const now = new moment();
   
