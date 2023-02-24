@@ -17,6 +17,8 @@ bot.setMyCommands([
 ])
 
 bot.on('message', async(msg)=>{
+	mongoose.connect(process.env.MONGODB_URL)
+	console.log('in bot')
   const chatId = msg.chat.id
    const checkAvailableData = await userModel.findOne({'chatId': chatId}).catch(e => console.log(e))
 
