@@ -7,8 +7,8 @@ const { sentWeather, addNewSubscribe } = require('./services');
 require('dotenv').config()
 
 mongoose.set("strictQuery", false);
+
 mongoose.connect(process.env.MONGODB_URL)
-console.log(222)
 
 const bot = new TelegramApi(process.env.TOKEN, {polling:true})
 
@@ -17,10 +17,8 @@ bot.setMyCommands([
 ])
 
 bot.on('message', async(msg)=>{
-	mongoose.connect(process.env.MONGODB_URL)
-	console.log('in bot')
   const chatId = msg.chat.id
-   const checkAvailableData = await userModel.findOne({'chatId': chatId}).catch(e => console.log(e))
+  const checkAvailableData = await userModel.findOne({'chatId': chatId}).catch(e => console.log(e))
 
   if(!checkAvailableData){
 
@@ -46,7 +44,6 @@ bot.on('message', async(msg)=>{
 })
 
 bot.on('location', async(msg)=>{
-	mongoose.connect(process.env.MONGODB_URL)
   const chatId = msg.chat.id
   const userLat = msg.location.latitude
   const userLon = msg.location.longitude
@@ -57,7 +54,6 @@ bot.on('location', async(msg)=>{
 const job = new CronJob(
 	'0 */1 * * * *',
 	async function () {
-		mongoose.connect(process.env.MONGODB_URL)
     const moment = require('moment')
     const now = new moment();
   
