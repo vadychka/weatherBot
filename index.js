@@ -18,7 +18,7 @@ bot.setMyCommands([
 
 bot.on('message', async(msg)=>{
   const chatId = msg.chat.id
-  const checkAvailableData = await userModel.findOne({'chatId': chatId})
+   const checkAvailableData = await userModel.findOne({'chatId': chatId}).catch(e => console.log(e))
 
   if(!checkAvailableData){
 
