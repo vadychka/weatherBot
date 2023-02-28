@@ -1,14 +1,16 @@
 const TelegramApi = require('node-telegram-bot-api')
 const CronJob = require('cron').CronJob;
 const mongoose = require('mongoose')
-const userModel = require("./models");
+const userModel = require("./models/user");
 const validator = require('validator');
 const { sentWeather, addNewSubscribe } = require('./services');
 require('dotenv').config()
 
 mongoose.set("strictQuery", false);
 
-mongoose.connect(process.env.MONGODB_URL)
+const url = `mongodb+srv://${process.env.MONGODB_NAME}:${process.env.MONGODB_PASS}@${process.env.MONGODB_CLUSTER}/?retryWrites=true&w=majority`
+
+mongoose.connect(url)
 
 const bot = new TelegramApi(process.env.TOKEN, {polling:true})
 
@@ -16,9 +18,9 @@ bot.setMyCommands([
     {command:'/start', description:'Get weather in your region.'}
 ])
 
-bot.on('message', async(msg)=>{
+bot.on('message', async(msg) => {
   const chatId = msg.chat.id
-  const checkAvailableData = await userModel.findOne({'chatId': chatId}).catch(e => console.log(e))
+  const checkAvailableData = await userModel.findOne({'chatId': chatId}).catch(e => {throw new Error(e)})
 
   if(!checkAvailableData){
 
@@ -37,7 +39,11 @@ bot.on('message', async(msg)=>{
                   one_time_keyboard: true,
                 }),
           });
-          addNewSubscribe(chatId, `${userTime}`)
+          try{
+            addNewSubscribe(chatId, `${userTime}`)
+          }catch(e){
+            throw new Error(e)
+          }
         }
     })
   }
@@ -48,19 +54,18 @@ bot.on('location', async(msg)=>{
   const userLat = msg.location.latitude
   const userLon = msg.location.longitude
 
-  await userModel.findOneAndUpdate({'chatId': chatId},{'lat': userLat , 'lon': userLon})
+  await userModel.findOneAndUpdate({'chatId': chatId},{'lat': userLat , 'lon': userLon}).catch(e => {throw new Error(e)})
+
 });
 
-const job = new CronJob(
+new CronJob(
 	'0 */1 * * * *',
 	async function () {
     const moment = require('moment')
     const now = new moment();
   
-    userModel.find({}, async (err, users)=>{
-      users.forEach(user => {
-        user.time === now.format("HH:mm") && sentWeather(user, bot)
-      })
+    userModel.find({time:now.format("HH:mm")}, async (err, users)=>{
+      users.forEach(user => sentWeather(user, bot))
     })
 	},
 	null, true, process.env.TZ

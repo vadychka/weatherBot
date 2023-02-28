@@ -1,5 +1,5 @@
 const axios = require('axios');
-const userModel = require("./models");
+const userModel = require("./models/user");
 
 module.exports.addNewSubscribe = (chatId, time)=> {
     const newUser = new userModel({
